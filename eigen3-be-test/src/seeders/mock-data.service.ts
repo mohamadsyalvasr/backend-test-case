@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Member } from "../modules/members/schemas/member.schema";
-import { Book } from "../modules/books/schemas/book.schema";
+import { Member } from "../modules/members/entities/member.entity";
+import { Book } from "../modules/books/entities/book.entity";
 
 @Injectable()
 export class MockDataService {

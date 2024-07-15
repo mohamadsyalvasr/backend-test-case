@@ -3,7 +3,7 @@ import { MembersService } from './members.service';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { Member } from "./schemas/member.schema";
+import { Member } from "./entities/member.entity";
 
 @ApiTags('Members')
 @Controller('members')

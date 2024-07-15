@@ -3,7 +3,7 @@ import { BorrowsService } from './borrows.service';
 import { CreateBorrowDto } from './dto/create-borrow.dto';
 import { UpdateBorrowDto } from './dto/update-borrow.dto';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { Member } from "../members/schemas/member.schema";
+import { Member } from "../members/entities/member.entity";
 
 @ApiTags('Borrows')
 @Controller('borrows')

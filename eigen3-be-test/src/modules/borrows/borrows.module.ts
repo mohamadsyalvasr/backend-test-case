@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { BorrowsService } from './borrows.service';
 import { BorrowsController } from './borrows.controller';
 import { MongooseModule } from "@nestjs/mongoose";
-import { Borrow, BorrowSchema } from "./schemas/borrow.schema";
-import { Member, MemberSchema } from "../members/schemas/member.schema";
-import { Book, BookSchema } from "../books/schemas/book.schema";
+import { Borrow, BorrowSchema } from "./entities/borrow.entity";
+import { Member, MemberSchema } from "../members/entities/member.entity";
+import { Book, BookSchema } from "../books/entities/book.entity";
 
 @Module({
   imports: [

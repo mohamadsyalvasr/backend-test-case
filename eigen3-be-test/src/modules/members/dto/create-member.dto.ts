@@ -19,4 +19,7 @@ export class CreateMemberDto {
   @IsString()
   @MinLength(4)
   name: string;
+
+  // penaltyEndDate
+  penaltyEndDate? : Date;
 }

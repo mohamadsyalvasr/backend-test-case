@@ -1,11 +1,9 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
-import { CreateBorrowDto } from './dto/create-borrow.dto';
-import { UpdateBorrowDto } from './dto/update-borrow.dto';
 import { InjectModel } from "@nestjs/mongoose";
-import { Borrow } from "./schemas/borrow.schema";
 import { Model } from "mongoose";
-import { Book } from "../books/schemas/book.schema";
-import { Member } from "../members/schemas/member.schema";
+import { Member } from "../members/entities/member.entity";
+import { Book } from "../books/entities/book.entity";
+import { Borrow } from "./entities/borrow.entity";
 
 @Injectable()
 export class BorrowsService {
@@ -25,7 +23,7 @@ export class BorrowsService {
     const book = await this.bookModel.findOne({ code: bookCode });
     if (!book) throw new BadRequestException('Invalid book code');
 
-    const existingBorrows = await this.borrowModel.find({ member: memberCode, returnedDate: null }).exec();
+    const existingBorrows = await this.borrowModel.find({ member: memberCode, returnedDate: null });
     if (existingBorrows.length >= 2) throw new BadRequestException('Member cannot borrow more than 2 books');
 
     if (book.stock <= 0) {
@@ -48,14 +46,12 @@ export class BorrowsService {
     await book.save();
 
     const borrowCode = `BOR-${Date.now()}-${Math.floor(Math.random() * 10)}`; // Generate random code
-    const createdBorrow = new this.borrowModel({
+    return this.borrowModel.create({
       code: borrowCode,
       member: memberCode,
       book: bookCode,
       borrowedDate: new Date(),
     });
-
-    return createdBorrow.save();
   }
 
   async returnBook(code: string): Promise<Borrow> {
@@ -74,6 +70,6 @@ export class BorrowsService {
   }
 
   async findAll(): Promise<Borrow[]> {
-    return this.borrowModel.find().exec();
+    return this.borrowModel.find();
   }
 }

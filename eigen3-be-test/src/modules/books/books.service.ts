@@ -2,7 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from "@nestjs/common
 import { CreateBookDto } from './dto/create-book.dto';
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { Book } from "./schemas/book.schema";
+import { Book } from "./entities/book.entity";
 
 @Injectable()
 export class BooksService {
@@ -10,8 +10,7 @@ export class BooksService {
 
   async create(createBookDto: CreateBookDto) {
     try {
-      const createdBook = new this.bookModel(createBookDto);
-      return await createdBook.save();
+      return await this.bookModel.create(createBookDto);
     } catch (error) {
       if (error.code === 11000) {
         throw new ConflictException(`Book with title '${createBookDto.title}' already exists`);

@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { Member } from "./schemas/member.schema";
-import { Borrow } from "../borrows/schemas/borrow.schema";
+import { Member } from "./entities/member.entity";
+import { Borrow } from "../borrows/entities/borrow.entity";
 
 export interface MemberWithBorrowCount extends Member {
   numberOfBorrowedBooks: number;
@@ -16,7 +16,7 @@ export class MembersService {
   ) {}
 
   async create(createMemberDto: any) {
-    const lastMember = await this.memberModel.findOne().sort({code: -1}).exec();
+    const lastMember = await this.memberModel.findOne().sort({code: -1});
     let nextCode = 'M001';
 
     if (lastMember && lastMember.code) {
@@ -26,8 +26,7 @@ export class MembersService {
 
     createMemberDto.code = nextCode;
 
-    const createdMember = new this.memberModel(createMemberDto);
-    return createdMember.save();
+    return this.memberModel.create(createMemberDto);
   }
 
   async findAll() {
@@ -54,27 +53,30 @@ export class MembersService {
   }
 
   async findOne(code: string) {
-    const member = await  this.memberModel.findOne({ code }).exec();
-    if(!member){
+    const member = await this.memberModel.findOne({ code }).lean().exec();
+    if (!member) {
       throw new NotFoundException(`Member with code '${code}' not found`);
     }
 
-    const borrowedBooksCount = await this.borrowModel.countDocuments({member: member.code, returnedDate: null}).exec();
-    const memberObject = member.toObject() as MemberWithBorrowCount;
-    memberObject.numberOfBorrowedBooks = borrowedBooksCount;
-
-    return memberObject
+    const borrowedBooksCount = await this.borrowModel.countDocuments({ member: member.code, returnedDate: null });
+    return {
+      ...member,
+      numberOfBorrowedBooks: borrowedBooksCount,
+    };
   }
 
   async update(code: string, updateMemberDto: any) {
-    const existingMember = await this.memberModel.findOne({code});
+    const existingMember = await this.memberModel.findOne({ code });
+    if (!existingMember) {
+      throw new NotFoundException(`Member with code '${code}' not found`);
+    }
     existingMember.name = updateMemberDto.name;
 
     return existingMember.save();
   }
 
   async remove(code: string) {
-    const result = await this.memberModel.deleteOne({ code }).exec();
+    const result = await this.memberModel.deleteOne({ code });
     if (result.deletedCount === 0) {
       throw new NotFoundException(`Member with code '${code}' not found`);
     }

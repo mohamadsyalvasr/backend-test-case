@@ -3,7 +3,7 @@ import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { Book } from "./schemas/book.schema";
+import { Book } from "./entities/book.entity";
 
 @ApiTags('Books')
 @Controller('books')

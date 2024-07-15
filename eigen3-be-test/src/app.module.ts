@@ -5,12 +5,12 @@ import { MembersModule } from './modules/members/members.module';
 import { BooksModule } from './modules/books/books.module';
 import { BorrowsModule } from './modules/borrows/borrows.module';
 import { MongooseModule } from "@nestjs/mongoose";
-import { Book, BookSchema } from "./modules/books/schemas/book.schema";
-import { Member, MemberSchema } from "./modules/members/schemas/member.schema";
+import { Member, MemberSchema } from "./modules/members/entities/member.entity";
 import { MockDataService } from "./seeders/mock-data.service";
 import { APP_FILTER, APP_INTERCEPTOR } from "@nestjs/core";
 import { TransformInterceptor } from "./common/interceptors/transform.interceptor";
 import { ExceptionsFilter } from "./common/filters/exceptions.filter";
+import { Book, BookSchema } from "./modules/books/entities/book.entity";
 
 @Module({
   imports: [
